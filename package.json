@@ -1,0 +1,16 @@
+{
+  "name": "nodeapi",
+  "version": "1.0.0",
+  "description": "a nodejs api",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "author": "C M Sanjay Krishna",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.3"
+  }
+}
