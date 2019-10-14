@@ -1,7 +1,8 @@
-const getPost = (req,res)=>{
-    res.send("Hello from nodejs updated");
-    }
+const express = require("express");
+const postController = require("../controllers/post")
 
-module.exports = {
-    getPost
-};
+const router = express.Router();
+
+router.get("/", postController.getPost);
+
+module.exports = router;
