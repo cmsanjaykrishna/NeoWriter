@@ -6,8 +6,8 @@ const {userById} = require("../controllers/user");
 
 const router = express.Router();
 
-router.get("/", requireSignIn, getPost);
-router.post("/post/create", createPostValidator, createPost);
+router.get("/", getPost);
+router.post("/post", requireSignIn, createPostValidator, createPost);
 
 router.param("userId", userById);
 
