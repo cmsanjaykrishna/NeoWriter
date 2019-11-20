@@ -1,16 +1,15 @@
 const User = require("../models/user")
 
-exports.userById = (req, res, userId) => {
+exports.userById = (req, res, next, userId) => {
     User.findById(userId).exec((err, user) => {
         if (err || !user) {
             res.status(400).json({
                 error: "User not found"
             });
         }
-        res.profile = user;
+        req.profile = user;
         next();
-    }); 
-       
+    });    
 };
 
 exports.hasAuthorisation = (req, res, next) => {
