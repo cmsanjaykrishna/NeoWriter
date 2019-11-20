@@ -4,7 +4,8 @@
   "description": "a nodejs api",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "debug": "nodemon --inspect app.js"
   },
   "author": "C M Sanjay Krishna",
   "license": "ISC",
