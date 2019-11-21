@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const User = require("../models/user")
 
 exports.userById = (req, res, next, userId) => {
@@ -9,7 +10,7 @@ exports.userById = (req, res, next, userId) => {
         }
         req.profile = user;
         next();
-    });    
+    });
 };
 
 exports.hasAuthorisation = (req, res, next) => {
@@ -32,6 +33,38 @@ exports.allUsers = (req, res) => {
     }).select("name email updated created");
 };
 
-exports.getUser = (req,res) => {
+exports.getUser = (req, res) => {
+    req.profile.hashed_password = undefined;
+    req.profile.salt = undefined;
     return res.json(req.profile);
 };
+
+exports.updateUser = (req, res, next) => {
+    let user = req.profile;
+    user = _.extend(user, req.body);
+    user.updated = Date.now();
+    user.save((err) => {
+        if (err) {
+            return res.status(400).json({
+                error: "You are not authorised to perform this action"
+            })
+        }
+        user.salt = undefined;
+        user.hashed_password = undefined;
+        res.json({user})
+    })
+}
+
+exports.deleteUser = (req, res, next) => {
+    let user = req.profile;
+    user.remove((err, user) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        user.salt = undefined;
+        user.hashed_password = undefined;
+        res.json({user})
+    })
+}
