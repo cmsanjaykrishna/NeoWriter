@@ -11,7 +11,7 @@ mongoose.set('useUnifiedTopology', true);
 dotenv.config();
 
 //db connect
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true }).then(()=>console.log("Database connected"));
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true }).then(() => console.log("Database connected"));
 
 mongoose.connection.on("error", err => console.log(`DB error : ${err.message}`));
 
@@ -27,14 +27,13 @@ app.use(expressValidator());
 app.use('/', postRoutes);
 app.use('/', authRoutes);
 app.use('/', userRoutes);
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
-      res.status(401).json({error : "Unauthorised user"});
+        res.status(401).json({ error: "Unauthorised user" });
     }
-  });
-
-const port = process.env.PORT || 8080;
-app.listen(port, ()=>{
-    console.log(`Node app listening on port : ${port}`);
 });
 
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`Node app listening on port : ${port}`);
+});
