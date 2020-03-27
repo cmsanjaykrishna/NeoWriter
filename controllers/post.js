@@ -33,11 +33,11 @@ exports.createPost = (req, res, next) => {
         });
     });
     const post = new Post(req.body);
+    post.postedBy = req.profile;
     //console.log(`Creating new post : `, post);
     post.save().then(result => {
         res.json({
             post: result
         });
     });
-
 };
