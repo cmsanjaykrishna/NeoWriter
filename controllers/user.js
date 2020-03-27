@@ -11,7 +11,7 @@ exports.userById = (req, res, next, userId) => {
         req.profile = user;
         next();
     });
-};
+}
 
 exports.hasAuthorisation = (req, res, next) => {
     const authorised = req.profile && req.auth && req.profile.id == req.auth.id
@@ -20,7 +20,7 @@ exports.hasAuthorisation = (req, res, next) => {
             error: "User not authorised"
         });
     }
-};
+}
 
 exports.allUsers = (req, res) => {
     User.find((err, users) => {
@@ -31,13 +31,13 @@ exports.allUsers = (req, res) => {
         }
         res.json({ users });
     }).select("name email updated created");
-};
+}
 
 exports.getUser = (req, res) => {
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
     return res.json(req.profile);
-};
+}
 
 exports.updateUser = (req, res, next) => {
     let user = req.profile;
@@ -47,12 +47,12 @@ exports.updateUser = (req, res, next) => {
         if (err) {
             return res.status(400).json({
                 error: "You are not authorised to perform this action"
-            })
+            });
         }
         user.salt = undefined;
         user.hashed_password = undefined;
-        res.json({user})
-    })
+        res.json({user});
+    });
 }
 
 exports.deleteUser = (req, res, next) => {
@@ -61,10 +61,10 @@ exports.deleteUser = (req, res, next) => {
         if (err) {
             return res.status(400).json({
                 error: err
-            })
+            });
         }
         user.salt = undefined;
         user.hashed_password = undefined;
         res.json({user})
-    })
+    });
 }
