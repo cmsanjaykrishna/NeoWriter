@@ -2,6 +2,23 @@ const Post = require("../models/post");
 const formidable = require("formidable");
 const fs = require("fs");
 
+exports.postById = (req, res, next, id) => {
+    Post.findById(id)
+        .populate('postedBy', '_id name')
+        .populate('comments.postedBy', '_id name')
+        .populate('postedBy', '_id name role')
+        .select('_id title body created likes comments photo')
+        .exec((err, post) => {
+            if (err || !post) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            req.post = post;
+            next();
+        });
+};
+
 exports.getPost = (req, res) => {
     const posts = Post.find()
         .populate("postedBy", "_id name")
@@ -50,7 +67,8 @@ exports.createPost = (req, res, next) => {
     }); */
 }
 
-exports.postsByUser = (req, res) => {
+exports.postsByUserId = (req, res) => {
+    console.log("in postsByUserId")
     Post.find({
             postedBy: req.profile._id
         })
@@ -65,3 +83,34 @@ exports.postsByUser = (req, res) => {
             res.json(posts);
         });
 }
+
+exports.isPoster = (req, res, next) => {
+    let sameUser = req.post && req.auth && req.post.postedBy._id == req.auth._id;
+    let adminUser = req.post && req.auth && req.auth.role === 'admin';
+
+    // console.log("req.post ", req.post, " req.auth ", req.auth);
+    // console.log("SAMEUSER: ", sameUser, " ADMINUSER: ", adminUser);
+
+    let isPoster = sameUser || adminUser;
+
+    if (!isPoster) {
+        return res.status(403).json({
+            error: 'User is not authorized'
+        });
+    }
+    next();
+};
+
+exports.deletePost = (req, res) => {
+    let post = req.post;
+    post.remove((err, post) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json({
+            message: 'Post deleted successfully'
+        });
+    });
+};
