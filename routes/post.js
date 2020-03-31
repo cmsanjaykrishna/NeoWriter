@@ -4,6 +4,7 @@ const {
     postById,
     postsByUserId,
     isPoster,
+    updatePost,
     deletePost
 } = require("../controllers/post");
 const {
@@ -19,8 +20,9 @@ const {
 const router = express.Router();
 
 router.post('/post/new/:userId', requireSignIn, createPost, createPostValidator);
-router.get('/posts/by/:userId', requireSignIn, postsByUserId);
+router.get('/posts/by/:userId', postsByUserId);
 router.delete('/post/:postId', requireSignIn, isPoster, deletePost);
+router.put('/post/:postId', requireSignIn, isPoster, updatePost);
 
 router.param("userId", userById);
 router.param("postId", postById);

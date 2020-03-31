@@ -9,7 +9,6 @@ exports.userById = (req, res, next, userId) => {
             });
         }
         req.profile = user;
-        console.log("end of userById")
         next();
     });
 }
